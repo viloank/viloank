@@ -3,6 +3,6 @@
   tasks:
     - name: Test
       debug:
-        msg: "Test git checkout"
+        msg: "Test git checkout with another commit"
         
   
