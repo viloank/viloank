@@ -1,9 +1,9 @@
 ---
-hosts: "{{ affected_hosts }}"
-tasks:
-  - name: check uptime
-    command: uptime
-    register: uptime_out
+- hosts: "{{ affected_hosts }}"
+  tasks:
+    - name: check uptime
+      command: uptime
+      register: uptime_out
 
-  - debug:
-      var: uptime_out.stdout_lines
+    - debug:
+        var: uptime_out.stdout_lines
