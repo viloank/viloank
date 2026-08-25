@@ -1,5 +1,5 @@
 ---
-hosts: affected_hosts
+hosts: "{{ affected_hosts }}"
 tasks:
   - name: check uptime
     command: uptime
