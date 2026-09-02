@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  gather_facts: false
+  ignore_errors: true
+  connection: local
+  roles:
+  - role: ansible_role_integration_execute
+  vars:
+    final_ack: false
+    eiroles_enable:
+      socks_tunnel_role: true
+      final_ack_role: true
+     
+# ***** Calling common playbook  *****
+- name: Calling common playbook
+  hosts: "{{ hostvars['localhost']['affected_host'] }}"
+  become: "{{ (ostype != 'windows') | ternary('yes', 'no') }}"
+  gather_facts: false
+  tasks:
+    - name: Include ansible_role_integration_sra_common_playbook
+      include_role:
+        name: ansible_role_integration_sra_common_playbook
+      when:
+        - not hostvars["localhost"]["usecase_role_stat"]
+        - '(hostvars[hostvars["localhost"]["affected_host"]]["host_reachable"]|default("false")) == true'
+        - hostvars['localhost']['common_role_name'] | default("None") != "None"
+        - hostvars['localhost']['custom_playbook'] | default(False) == False
+        
+# ***** Calling custom playbooks list *****
+- name: Import custom playbooks
+  import_playbook: custom_playbooks.yml
+  ignore_errors: true
+  when:
+    - not hostvars["localhost"]["usecase_role_stat"]
+    - '(hostvars[hostvars["localhost"]["affected_host"]]["host_reachable"]|default("false")) == true'
+    - hostvars['localhost']['custom_playbook'] | default(False) == True
+
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  ignore_errors: true
+  roles:
+    - role: ansible_role_integration_execute
+  vars:
+    final_ack: true
+ 

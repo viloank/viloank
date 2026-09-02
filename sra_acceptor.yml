@@ -1,0 +1,116 @@
+---
+- hosts: localhost
+  gather_facts: false
+  ignore_errors: true
+  vars:
+    final_ack: false
+    final_ack_before_preprocessor: false
+    excludesr: false
+    output: ""
+    alias_vars: {}
+  vars_files:
+    - excludesr_rules.yml
+    - mapper_config.yml
+
+  tasks:
+    - name: Print sr_data
+      debug:
+        msg: "{{ sr_data }}"
+        
+    - name: Load var
+      include_vars:
+        file: exclude_validation.yml
+        name: exclude_classification
+
+    - name: load multi var
+      include_vars:
+        file: sr_data_vars.yml
+        name: multi_vars
+
+    - debug: var=multi_vars
+
+    - debug: var=multi_vars['ITDHOSTNAME']
+
+    - debug: var=exclude_classification
+
+    - name: Setting validation flag
+      set_fact:
+        validation_flag: false
+      with_items: "{{ exclude_classification.excludelist }}"
+      when: item in sr_data['CLASSIFICATION']
+
+    - debug: var=validation_flag
+
+    - name: Load mandatory var
+      include_vars:
+        file: mandatory_vars_config.yml
+        name: validate_vars
+
+    - debug: var=validate_vars
+
+    - name: set placeholder var for customer name
+      set_fact:
+        code_var: "{{'account_code' if (sr_data['account_code'] is defined and sr_data['account_code']|length > 0) else 'ITDCUSTOMERNAME'}}"
+
+    # validation for default mandatory vars irrespective of the validation flag set
+    - name: check if mandatory fields exists
+      block:
+        - name: Check if default mandatory field exists
+          set_fact:
+            output: "{{ output }} {{ item }}"
+            final_ack_before_preprocessor: true
+          with_items:
+            - "{{code_var}}"
+            - CLASSIFICATION
+
+        - name: Check if mandatory fields exists
+          set_fact:
+            output: "{{ output }} {{ item }}"
+            final_ack_before_preprocessor: true
+          with_items: "{{ validate_vars.mandatoryvars }}"
+      when:
+        - validation_flag is defined
+        - validation_flag
+        - item not in sr_data or sr_data[item] == ""
+
+    - name: Get sr_data value from multiple vars only ITDHOSTNAME
+      set_fact:
+        alias_vars: "{{ alias_vars | combine(new_item|from_yaml, recursive=true) }}"
+        debug_data: "{{new_item}}"
+      vars:
+        new_item: "{ {{ item.key }}: {{ sr_data[multi_vars[item.key]] }} }"
+      loop: "{{ lookup('dict', multi_vars) }}"
+      when:
+        - validation_flag is defined
+        - validation_flag
+        - item.key not in sr_data or sr_data[item.key] == '' 
+
+
+    - name: set org code
+      set_fact:
+        org_code: "{{ sr_data[code_var] }}"
+
+
+    - name: "Call preprocessor"
+      include_role:
+        name: ansible_role_integration_preprocessor
+      vars:
+        template_vars: "{{ template_vars }}"
+      when: not final_ack
+
+    - name: Set Response Status
+      set_fact:
+        status_msg:
+         EVENT_EXCLUDED: "NA"
+         HOST_FOUND: "NA"
+         HOST_EXCLUDED: "NA"
+         SECOND_JOB_ID: "NA"
+         FINAL_ACK: "TRUE"
+         FINAL_ACK_REASON:  "Mandatory fields are missing in sr_data. \n Missing field list: {{ output.split()|join(',') }}"
+      when: final_ack_before_preprocessor
+
+
+    - name: Response status
+      debug:
+        msg: "{{ status_msg }}"
+      when: final_ack_before_preprocessor
