@@ -1,0 +1,4 @@
+ITDHOSTNAME: 'hostname'
+ITDFQDN: 'fqdn'
+ITDIPADDRESS: 'ip_address'
+ITDCUSTOMERNAME: 'account_code'
