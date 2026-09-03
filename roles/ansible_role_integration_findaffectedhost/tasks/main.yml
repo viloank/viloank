@@ -1,0 +1,95 @@
+---
+- name: Display alias vars
+  debug:
+    msg:
+      - "Find AH {{alias_vars}}"
+      
+- name: "Set ipaddress from ticket data"
+  set_fact:
+    ipaddress: "{{ (sr_data['ITDIPADDRESS'] is defined) | ternary(sr_data['ITDIPADDRESS'], alias_vars['ITDIPADDRESS']) }}"
+
+- name: "Set fqdn from ticket data"
+  set_fact:    
+    fqdn: "{{ (sr_data['ITDFQDN'] is defined) | ternary(sr_data['ITDFQDN'], alias_vars['ITDFQDN']) }}"
+
+- name: "Set hostname from ticket data"
+  set_fact:    
+    hostname: "{{ (sr_data['ITDHOSTNAME'] is defined) | ternary(sr_data['ITDHOSTNAME'], alias_vars['ITDHOSTNAME']) }}"
+
+- name: "Debug host_status"
+  debug:
+    msg: "{{ hostname }} {{ ipaddress }} {{ fqdn }}"
+- name: "Find affteced host"
+  set_fact:
+    host_status: "{{ lookup('find_affected_host', errors='warn') }}"
+
+- name: "Debug host_status"
+  debug:
+    msg: "{{ host_status }}"
+
+- name: "Set affected host"
+  set_fact:
+    affected_host: "{{ host_status.host_name }}" 
+  when: host_status.host_found  and not host_status.found_duplicates
+
+- name: Set facts for final ack role for host does not exist.
+  set_fact:
+    ticket_message: "Host not found or is disabled in tower"
+    ticket_automation: "Escalation"
+    ticket_status: "Transfer"
+    ticket_automation_type: "I"
+    ticket_rc: "4"
+    ticket_closure_code: "Escalation - Device Not in Inventory"
+    host_accessible: "NOT APPLICABLE"
+    matcher_stat: "NOT APPLICABLE"
+    matcher_name: "NOT APPLICABLE"
+    sr_allowed: "NOT APPLICABLE"
+    final_ack: true
+  when: not host_status.host_found  and not host_status.found_duplicates and not host_status.error
+
+- name: Set facts for final ack role for host in excluded group
+  set_fact:
+    ticket_message: "Host is excluded from automation"
+    ticket_automation: "Escalation"
+    ticket_status: "Transfer"
+    ticket_automation_type: "I"
+    ticket_rc: "5"
+    ticket_closure_code: "Escalation - Device excluded from Automation"
+    host_accessible: "NOT APPLICABLE"
+    matcher_stat: "NOT APPLICABLE"
+    matcher_name: "NOT APPLICABLE"
+    sr_allowed: "NOT APPLICABLE"
+    final_ack: true
+  when: 
+  - "'exclude_group' in host_status"
+  - host_status.exclude_group
+
+- name: Set facts for final ack role for duplicate host in tower.
+  set_fact:
+    ticket_message: "Duplicate hosts exists in tower. Hosts found: {{ host_status.duplicate_hosts }}"
+    ticket_automation: "Escalation"
+    ticket_status: "Transfer"
+    ticket_automation_type: "I"
+    ticket_rc: "3"
+    ticket_closure_code: "Escalation"
+    host_accessible: "NOT APPLICABLE"
+    matcher_stat: "NOT APPLICABLE"
+    matcher_name: "NOT APPLICABLE"
+    sr_allowed: "NOT APPLICABLE"
+    final_ack: true
+  when: host_status.host_found  and host_status.found_duplicates
+
+- name: Set facts for final ack role for connection error to tower.
+  set_fact:
+    ticket_message: "Error in getting host details from tower. Error: {{ host_status.error_message }}"
+    ticket_automation: "Escalation"
+    ticket_status: "Transfer"
+    ticket_automation_type: "I"
+    ticket_rc: "4"
+    ticket_closure_code: "Escalation - Unable to connect to Tower API"
+    host_accessible: "NOT APPLICABLE"
+    matcher_stat: "NOT APPLICABLE"
+    matcher_name: "NOT APPLICABLE"
+    sr_allowed: "NOT APPLICABLE"
+    final_ack: true
+  when: not host_status.host_found  and host_status.error
