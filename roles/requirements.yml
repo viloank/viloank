@@ -3,9 +3,9 @@
 #  src: git+https://github.kyndryl.net/IBM-GTS-JP-Shared/ansible_role_integration_preprocessor.git
 #  version: master
 
-- name: ansible_role_integration_findaffectedhost
-  src: git+https://github.com/viloank/viloank/tree/main/roles/ansible_role_integration_findaffectedhost.git
-  version: master
+#- name: ansible_role_integration_findaffectedhost
+#  src: git+https://github.com/viloank/viloank/tree/main/roles/ansible_role_integration_findaffectedhost.git
+#  version: master
   
   
 #- name: ansible_role_integration_sra_common_playbook
