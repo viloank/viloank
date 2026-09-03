@@ -4,7 +4,7 @@
 #  version: master
 
 - name: ansible_role_integration_findaffectedhost
-  src: git+https://github.com/kyndryl-global-delivery/ansible_role_integration_findaffectedhost.git
+  src: git+https://github.com/viloank/viloank/tree/main/roles/ansible_role_integration_findaffectedhost.git
   version: master
   
   
