@@ -1,0 +1,8 @@
+galaxy_info:
+  author: Anil K Reddy (ankreddy@in.ibm.com)
+  description: Ansible role integration preprocessor
+  company: IBM
+  license: IBM Intellectual Property
+  min_ansible_version: 1.2
+  galaxy_tags: []
+dependencies: []

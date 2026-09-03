@@ -1,0 +1,33 @@
+---
+- name: Get credential
+  uri:
+    url: "{{ lookup('env', 'TOWER_HOST') }}\
+          /api/v2/credentials\
+          /?search={{ cred_search }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ lookup('env','TOWER_OAUTH_TOKEN') }}"
+    body_format: json
+    status_code: 201, 200
+    force_basic_auth: false
+    validate_certs: false
+  environment:
+    no_proxy:
+      "{{ lookup('env','TOWER_HOST') | urlsplit('hostname') }}"
+  register: get_credential
+  #when: item is not search("next_credential")
+
+- name: unique credential type and ID
+  set_fact:
+    cred_type: "{{ cred_type + [ get_credential.json.results[0].summary_fields.credential_type.id ] }}"
+    cred_id: "{{ cred_id + [ get_credential.json.results[0].id ] }}"
+  when: get_credential.json.results[0].summary_fields.credential_type.id not in cred_type
+
+- name: Print duplicate credential types
+  debug:
+    msg: "Duplicate Credentials Type: {{ get_credential.json.results[0].summary_fields.credential_type.name }}. Skipping Credential: {{ get_credential.json.results[0].name }} "
+  when: get_credential.json.results[0].id not in cred_id
+
+- name: list cred find output 
+  debug: 
+    msg: "{{ get_credential }}"

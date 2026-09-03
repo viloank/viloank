@@ -1,0 +1,11 @@
+---
+# vars file for ansible_role_integration_preprocessor
+affected_host: ''
+cred_id: []
+cred_type: []
+custom_template: ''
+skip_precheck: ''
+common_role_name: ''
+jt_launch_response:
+  status: 
+    - 000

@@ -1,0 +1,4 @@
+---
+# defaults file for ansible_role_integration_preprocessor
+
+extra_credentials: "{{ sr_data['extra_credentials'] | default([]) }}" 
