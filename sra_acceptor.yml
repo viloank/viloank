@@ -33,6 +33,10 @@
 
     - debug: var=exclude_classification
 
+    - name: Setting default validation flag
+      set_fact:
+        validation_flag: true
+
     - name: Setting validation flag
       set_fact:
         validation_flag: false
