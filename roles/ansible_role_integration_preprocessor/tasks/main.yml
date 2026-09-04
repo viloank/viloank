@@ -12,14 +12,29 @@
   - validation_flag is defined
   - not validation_flag
 
-- debug:
-    var:
-      - final_Ack
-      - excludesr
-      - affected_host
-      - extra_credentials
-      - cred_id
-      - tower_job_template_name
+- name: Debug final_ack
+  debug:
+    var: final_ack
+
+- name: Debug excludesr
+  debug:
+    var: excludesr
+
+- name: Debug affected_host
+  debug:
+    var: affected_host
+
+- name: Debug extra_credentials
+  debug:
+    var: extra_credentials
+
+- name: Debug cred_id
+  debug:
+    var: cred_id
+
+- name: Debug tower_job_template_name
+  debug:
+    var: tower_job_template_name
 
 - name: Debug affected host
   debug:
