@@ -12,6 +12,9 @@
   - validation_flag is defined
   - not validation_flag
 
+- debug:
+    var: awx_inventory_id
+
 - name: Debug final_ack
   debug:
     var: final_ack
