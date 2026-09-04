@@ -16,12 +16,16 @@ class LookupModule(LookupBase):
         display.display("")
         display.display("===== RAF Lookup Plugin =====")
         display.display("GET {}".format(url))
+        display.display("")
+        display.display("===== Calling AWX =====")
+        display.display(f"URL   : {url}")
+        display.display(f"Token : {token[:10]}...")
 
         try:
             response = open_url(
                 url,
                 headers={
-                    "Authorization": "Bearer {}".format(tower_token)
+                    "Authorization": f"Bearer {token}"
                 },
                 validate_certs=False
             )
@@ -44,7 +48,7 @@ class LookupModule(LookupBase):
             "http://13.204.249.230:31454"          #
         ).rstrip("/")
 
-        tower_token = os.environ.get(
+        token = os.environ.get(
             "TOWER_OAUTH_TOKEN",
             "XiCosswuvm2iX4j0hSRX9H2VtYoLHb"            #
         )
@@ -101,7 +105,7 @@ class LookupModule(LookupBase):
                 f"/hosts/?enabled=true&name__iexact={value}"
             )
 
-            js = self.tower_api(url, tower_token)
+            js = self.tower_api(url, token)
 
             display.display(
                 "Search '{}' returned {} host(s)".format(
