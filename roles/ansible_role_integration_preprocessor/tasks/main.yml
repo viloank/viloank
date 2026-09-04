@@ -49,7 +49,7 @@
 
 - name: Call second job template api
   uri:
-     url: "{{ tower_host }}/api/v2/job_templates/sra_executor/launch/"
+    url: "{{ tower_host }}/api/v2/job_templates/sra_executor/launch/"
    # url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/{% if 'jt1_sra_acceptor' in tower_job_template_name %}{{ org_code }}_jt2_sra_executor++{{ org_code }}{% else %}{{ org_code }}_sra_executor_dev++{{ org_code }}{% endif %}/launch/"
 #    url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/pjl_sra_executor_dev/launch/"
 #    url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/62158/launch/"
