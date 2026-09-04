@@ -12,49 +12,6 @@
   - validation_flag is defined
   - not validation_flag
 
-- debug:
-    var: awx_inventory_id
-
-- name: Debug Execution Environment variables
-  debug:
-    msg:
-      - "TOWER_HOST={{ lookup('env','TOWER_HOST') }}"
-      - "TOWER_OAUTH_TOKEN={{ lookup('env','TOWER_OAUTH_TOKEN') | length }} characters"
-      - "CONTROLLER_API_PATH={{ lookup('env','CONTROLLER_API_PATH') }}"
-
-- name: Debug final_ack
-  debug:
-    var: final_ack
-
-- name: Debug excludesr
-  debug:
-    var: excludesr
-
-- name: Debug affected_host
-  debug:
-    var: affected_host
-
-- name: Debug extra_credentials
-  debug:
-    var: extra_credentials
-
-- name: Debug cred_id
-  debug:
-    var: cred_id
-
-- name: Debug tower_job_template_name
-  debug:
-    var: tower_job_template_name
-
-- name: Debug affected host
-  debug:
-    var: affected_host
-
-- name: Debug host variables
-  debug:
-    var: hostvars[affected_host]
-
-
 - name: "Find credentials"
   vars:
     cred_search: "{{ hostvars[hostvars['localhost']['affected_host']][item] }}"
@@ -92,13 +49,14 @@
 
 - name: Call second job template api
   uri:
-    url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/{% if 'jt1_sra_acceptor' in tower_job_template_name %}{{ org_code }}_jt2_sra_executor++{{ org_code }}{% else %}{{ org_code }}_sra_executor_dev++{{ org_code }}{% endif %}/launch/"
+     url: "{{ tower_host }}/api/v2/job_templates/sra_executor/launch/"
+   # url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/{% if 'jt1_sra_acceptor' in tower_job_template_name %}{{ org_code }}_jt2_sra_executor++{{ org_code }}{% else %}{{ org_code }}_sra_executor_dev++{{ org_code }}{% endif %}/launch/"
 #    url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/pjl_sra_executor_dev/launch/"
 #    url: "{{ lookup('env', 'TOWER_HOST') }}/api/v2/job_templates/62158/launch/"
     method: POST
     body_format: json
     headers:
-      Authorization: "Bearer {{ lookup('env','TOWER_OAUTH_TOKEN') }}"
+      Authorization: "Bearer {{ tower_token }}"
       Content-Type: application/json
     body: "{{ resp_body }}"
     status_code: 201, 200
