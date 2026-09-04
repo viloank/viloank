@@ -12,6 +12,24 @@
   - validation_flag is defined
   - not validation_flag
 
+- debug:
+    var:
+      - final_Ack
+      - excludesr
+      - affected_host
+      - extra_credentials
+      - cred_id
+      - tower_job_template_name
+
+- name: Debug affected host
+  debug:
+    var: affected_host
+
+- name: Debug host variables
+  debug:
+    var: hostvars[affected_host]
+
+
 - name: "Find credentials"
   vars:
     cred_search: "{{ hostvars[hostvars['localhost']['affected_host']][item] }}"
