@@ -1,19 +1,19 @@
 ---
 - name: Get credential
   uri:
-    url: "{{ lookup('env', 'TOWER_HOST') }}\
+    url: "{{ tower_host }}\
           /api/v2/credentials\
           /?search={{ cred_search }}"
     method: GET
     headers:
-      Authorization: "Bearer {{ lookup('env','TOWER_OAUTH_TOKEN') }}"
+      Authorization: "Bearer {{ tower_token }}"
     body_format: json
     status_code: 201, 200
     force_basic_auth: false
     validate_certs: false
-  environment:
-    no_proxy:
-      "{{ lookup('env','TOWER_HOST') | urlsplit('hostname') }}"
+  #environment:
+  #  no_proxy:
+  #    "{{ lookup('env','TOWER_HOST') | urlsplit('hostname') }}"
   register: get_credential
   #when: item is not search("next_credential")
 
