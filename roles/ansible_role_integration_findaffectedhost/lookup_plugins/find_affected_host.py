@@ -21,7 +21,7 @@ class LookupModule(LookupBase):
             response = open_url(
                 url,
                 headers={
-                    "Authorization": "Bearer {}".format(token)
+                    "Authorization": "Bearer {}".format(tower_token)
                 },
                 validate_certs=False
             )
@@ -41,12 +41,12 @@ class LookupModule(LookupBase):
 
         tower_host = os.environ.get(
             "TOWER_HOST",
-            "http://3.7.58.250:31454"          # <-- CHANGE THIS
+            "http://13.204.249.230:31454"          #
         ).rstrip("/")
 
         tower_token = os.environ.get(
             "TOWER_OAUTH_TOKEN",
-            "PASTE_YOUR_TOKEN_HERE"            # <-- CHANGE THIS
+            "XiCosswuvm2iX4j0hSRX9H2VtYoLHb"            #
         )
 
         api_path = os.environ.get(
