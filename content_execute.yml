@@ -20,7 +20,7 @@
 # ***** Calling common playbook  *****
 - name: Calling common playbook
   hosts: "{{ hostvars['localhost']['affected_host'] }}"
-  become: "{{ (ostype != 'windows') | ternary('yes', 'no') }}"
+  #become: "{{ (ostype != 'windows') | ternary('yes', 'no') }}"
   gather_facts: false
   tasks:
     - debug:
