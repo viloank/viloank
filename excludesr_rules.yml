@@ -1,0 +1,19 @@
+# Release: 20.5.0.master
+excludelist_rules:
+#Rule 1
+#  - "CLASSIFICATION": "ITDRESLIN037"
+#  - "ITEM": ".*Change Access Rights to a File / Directory on Linux Server.*"
+# Rule 2
+#  - "Abstract": ".*(FooBar|BarFoo).*"
+#    #"AssetID": "^10.120.134.$".$"
+#    "AssetID": "^linuxTest134Svr.*$"
+# Rule 3
+#  - "Hostname": "sensitive_target.*"
+#includelist_rules:
+# Rule 4
+#  - "Abstract": ".*(WRule4).*"
+# Rule 5
+#  - "AssetID": "^.*(10$|20$)$"
+# Rule 6
+#  - "AlertKey": "Trustworthy_AK"
+#    #"Hostname": "sensitive_target_3"
