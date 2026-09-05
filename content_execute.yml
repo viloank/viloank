@@ -26,14 +26,6 @@
         - hostvars['localhost']['common_role_name'] | default("None") != "None"
         - hostvars['localhost']['custom_playbook'] | default(False) == False
         
-# ***** Calling custom playbooks list *****
-- name: Import custom playbooks
-  import_playbook: custom_playbooks.yml
-  ignore_errors: true
-  when:
-    - not hostvars["localhost"]["usecase_role_stat"]
-    - '(hostvars[hostvars["localhost"]["affected_host"]]["host_reachable"]|default("false")) == true'
-    - hostvars['localhost']['custom_playbook'] | default(False) == True
 
 - hosts: localhost
   gather_facts: false

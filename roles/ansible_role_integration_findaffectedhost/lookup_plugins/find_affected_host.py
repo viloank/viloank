@@ -45,7 +45,7 @@ class LookupModule(LookupBase):
 
         tower_host = os.environ.get(
             "TOWER_HOST",
-            "http://13.204.249.230:31454"          #
+            "http://13.207.181.35:31454"          #
         ).rstrip("/")
 
         token = os.environ.get(
