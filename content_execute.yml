@@ -11,6 +11,12 @@
       socks_tunnel_role: true
       final_ack_role: true
      
+- debug:
+    msg:
+          - "affected_host={{ affected_host | default('UNDEFINED') }}"
+          - "sr_data={{ sr_data | default('UNDEFINED') }}"
+          - "first_job_id={{ first_job_id | default('UNDEFINED') }}"
+
 # ***** Calling common playbook  *****
 - name: Calling common playbook
   hosts: "{{ hostvars['localhost']['affected_host'] }}"
