@@ -1,0 +1,7 @@
+---
+# tasks file for roles/ansible_role_integration_execute
+#
+- block:
+  - name: Performing initial tasks
+    include_tasks: prefinalacktasks.yml
+  when: not final_ack

@@ -1,0 +1,12 @@
+---
+# ***** Calling event mapper role  *****
+- block:
+  - name: Including vars related mapper_config
+    include_vars: mapper_config.yml
+
+  - name: Calling event mapper
+    import_role:
+      name: ansible_role_integration_sra_mapper
+  when:
+  - not hostvars["localhost"]["usecase_role_stat"]
+

@@ -1,0 +1,512 @@
+matchers:
+# - name: hello-world
+#   enabled: true
+#   skip_precheck: true
+#   custom_playbook: false
+#   matcher_expressions:
+#     - classification: ITDRESLIN037
+#     - classification: ^.*ITDRESLIN037.*$ 
+
+  - name: sra_restart_linux
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDREBOOTVM$
+        affected_host_ostype: ^LINUX$|^linux$
+      
+  - name: sra_restart_windows
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDREBOOTVM$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        
+  - name: sra_linux_change_rights_file_dir
+    enabled: true
+    custom_playbook: false
+    matcher_expressions: 
+      - classification: ^ITDLINUXCHANGEFFRIGHTS$
+
+  - name: sra_manage_service_windows
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWINDOWSERVICES$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        
+  - name: sra_manage_service_linux
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDLINUXSERVICES$
+        
+  - name: sra_server_build 
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^ITDINSTALLOS$
+
+  - name: sra_server_decom
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^ITDDELETEVM$|^ITDQSDELETEVM$
+
+  - name: sra_install_remove_linux_package
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDRESLIN049$
+        affected_host_ostype: ^LINUX$|^linux$
+
+  - name: sra_config_firewall_rule_windows
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWINFIREWALLCONFIG$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_change_linux_system_configuration_value
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDLINSYSTEMCONFIG$
+        affected_host_ostype: ^LINUX$|^linux$
+        
+  - name: sra_server_decom
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^ITDDELETEVM$
+
+  - name: sra_manage_vm
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^ITDMODIFYCPU$|^ITDMODIFYMEMORY$|^ITDVMOPERATION$|^ITDMODIFYRAM$|^ITDMODIFYSTATE$
+    
+  - name: sra_printer_hungfix
+    enabled: true
+    custom_playbook: false
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^SGI-PRINT-0001$
+        affected_host_ostype: ^AIX$|^aix$
+
+  - name: sra_mw_ux_apache_tomcat_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Apache Tomcat.*$
+        itdserviceaction: ^START$
+
+  - name: sra_mw_ux_apache_tomcat_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Apache Tomcat.*$
+        itdserviceaction: ^STOP$
+
+  - name: sra_mw_win_apache_tomcat_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions: 
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Apache Tomcat.*$
+        itdserviceaction: ^START$
+
+  - name: sra_mw_win_apache_tomcat_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions: 
+      - classification: ^ITDRESAPA0013$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Apache Tomcat.*$
+        itdserviceaction: ^STOP$
+
+  - name: sra_mw_win_apache_tomcat_remove_example
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDTOMCATREMOVEAPP$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_mw_ux_tomat_remove_example
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDTOMCATREMOVEAPP$
+        affected_host_ostype: ^LINUX$|^linux$
+
+  - name: sra_mw_win_tomcat_heap_config
+    enabled: true
+    custom_playbook: false
+    matcher_expressions: 
+      - classification: ^ITDTOMCATCONFIG$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_mw_ux_tomcat_heap_config
+    enabled: true
+    custom_playbook: false
+    matcher_expressions: 
+      - classification: ^ITDTOMCATCONFIG$
+        affected_host_ostype: ^LINUX$|^linux$
+
+  - name: sra_mw_ux_apache_http_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Apache Instance.*$
+        itdserviceaction: ^START$
+
+  - name: sra_mw_ux_apache_http_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Apache Instance.*$
+        itdserviceaction: ^STOP$
+
+  - name: sra_mw_win_apache_http_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Apache Instance.*$
+        itdserviceaction: ^START$
+
+  - name: sra_mw_win_apache_http_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESAPA0007$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Apache Instance.*$
+        itdserviceaction: ^STOP$
+
+  - name: sra_mw_win_apache_http_restart
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDAPACHERESTART$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_mw_ux_apache_http_restart
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDAPACHERESTART$
+        affected_host_ostype: ^LINUX$|^linux$
+ 
+  - name: sra_mw_win_apache_http_check_tls
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDAPACHECHECKCERT$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_mw_ux_apache_check_tls
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDAPACHECHECKCERT$
+        affected_host_ostype: ^LINUX$|^linux$
+
+  - name: sra_mw_win_redhat_jboss_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESJBS0001$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        itdoperation: ^START$
+
+  - name: sra_mw_win_redhat_jboss_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESJBS0001$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        itdoperation: ^STOP$
+
+  - name: sra_mw_ux_redhat_jboss_start
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESJBS0001$
+        affected_host_ostype: ^LINUX$|^linux$
+        itdoperation: ^START$
+
+  - name: sra_mw_ux_redhat_jboss_stop
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDRESJBS0001$
+        affected_host_ostype: ^LINUX$|^linux$
+        itdoperation: ^STOP$
+
+  - name: sra_mw_ux_apache_tomcat_deploy_app
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDTOMCATDEPLOY$
+        affected_host_ostype: ^LINUX$|^linux$
+
+  - name: sra_mw_win_apache_tomcat_deploy_app
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDTOMCATDEPLOY$
+        affected_host_ostype: ^WINDOWS$|^windows$
+
+  - name: sra_ux_oracle_rac_crs
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDORACLESERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*CRS.*$
+
+  - name: sra_ux_oracle_rac_ddbb_services
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDORACLESERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Oracle RAC - DDBB.*$
+
+  - name: sra_ux_oracle_si_ddbb_services
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDORACLESERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Oracle - Single Instance - DDBB.*$
+
+  - name: sra_ux_oracle_si_listener_services
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDORACLESERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Oracle - Single Instance - Listener.*$
+
+  - name: sra_mw_ux_was_change_server_config
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Change Server Configuration.*$
+
+  - name: sra_mw_win_was_change_server_config
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Change Server Configuration.*$
+
+  - name: sra_mw_ux_was_operational_health_chk
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Check Health.*$
+
+  - name: sra_mw_win_was_operational_health_chk
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Check Health.*$
+
+  - name: sra_mw_ux_was_download_logs
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^LINUX$|^linux$
+        item: ^.*Download Log.*$
+
+  - name: sra_mw_win_was_download_logs
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:      
+      - classification: ^ITDWASSERVICES$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        item: ^.*Download Log.*$
+
+  - name: sra_mw_ux_websphere_start_app_server
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVERINSTANCE$
+        affected_host_ostype: ^LINUX$|^linux$
+        itdasoperation: ^START$
+
+  - name: sra_mw_ux_websphere_stop_app_server
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVERINSTANCE$
+        affected_host_ostype: ^LINUX$|^linux$
+        itdasoperation: ^STOP$
+
+  - name: sra_mw_win_websphere_start_app_server
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVERINSTANCE$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        itdasoperation: ^START$
+
+  - name: sra_mw_win_websphere_stop_app_server
+    enabled: true
+    custom_playbook: false
+    matcher_expressions:
+      - classification: ^ITDWASSERVERINSTANCE$
+        affected_host_ostype: ^WINDOWS$|^windows$
+        itdasoperation: ^STOP$
+
+  - name: sra_terraform_remote_statefile
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^TERRAFORMCONFIG$
+        
+  - name: sra_mq_patch_linux
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^MQPATCHINGLINUX$
+  
+  - name: sra_mq_patch_windows
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^MQPATCHINGWIN$
+
+  - name: sra_patching_linux
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^OSLINUXPATCHING$
+
+  - name: sra_patching_wsus
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^WSUSPATCHSCAN$
+
+  - name: sra_patching_windows
+    enabled: true
+    custom_playbook: true
+    skip_precheck: true
+    matcher_expressions:
+      - classification: ^OSWINDOWSPATCHING$
+
+  - name: ansible_role_integration_sra_success_testing 
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^RAFINTESUCCESS$
+
+  - name: ansible_role_integration_sra_failure_testing
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^RAFINTEFAIL$
+
+  - name: ansible_role_integration_sra_success_testing_updated
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: true
+    matcher_expressions:      
+      - classification: ^RAFINTEAPH$
+
+  - name: ansible_role_integration_oracle
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:      
+      - classification: ^RAFINTEORA$
+
+  - name: ansible_role_integration_zos_auth
+    enabled: true
+    custom_playbook: true 
+    skip_precheck: false
+    matcher_expressions:      
+      - classification: ^RAFINTEZOSAUTH$
+
+  - name: ansible_role_integration_db2
+    enabled: true
+    custom_playbook: false
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFINTEDB2$
+
+# ********** Below playbooks are for MF Infrastructure Setup Automation **********
+  - name: kyndryl.pjl_sra_mf.infra_catalog_test
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFINFRACATALOGTEST.*$
+
+  - name: kyndryl.pjl_sra_mf.infra_modules_test
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFINFRAMODULESTEST.*$
+
+  - name: kyndryl.pjl_sra_mf.infra_sample_operation
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFINFRASAMPLEOPERATION.*$
+
+  - name: kyndryl.pjl_sra_mf.infra_staging
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFINFRASTAGING.*$
+
+  - name: kyndryl.pjl_sra_mf.infra_deploy_prod
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFINFRADEPLOYPROD.*$
+
+# ********** Below playbooks are for MF Service Request Automation **********
+  - name: kyndryl.pjl_sra_mf.service_password_reset
+    enabled: true
+    custom_playbook: false 
+    skip_precheck: false
+    matcher_expressions:
+      - classification: ^RAFMFSRPWRESET.*$
