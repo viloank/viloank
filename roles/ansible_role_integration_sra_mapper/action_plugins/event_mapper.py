@@ -108,6 +108,20 @@ class ActionModule(ActionBase):
 
         # Load job variables
         temp_vars = task_vars.copy()
+        display.display("========== EVENT MAPPER INPUT ==========")
+
+        for key in [
+           "classification",
+           "item",
+           "itemcode",
+           "affected_host",
+           "ipaddress",
+           "sr_data",
+           "matchers",
+           "em_vars_to_template"
+        ]:
+           display.display("{} = {}".format(key, temp_vars.get(key)))
+        
         data_loader = DataLoader()
 
         vars_to_template = {k: temp_vars[k] for k in temp_vars['em_vars_to_template']}
@@ -170,6 +184,9 @@ class ActionModule(ActionBase):
             result['msg'] = "Matchers format is not correct. Check if the " \
                             "variable 'matchers' contains a list of matchers."
             return result
+            
+        display.display("===== MATCHERS =====")
+        display.display(matchers)
 
         for matcher in matchers:
 
@@ -180,10 +197,18 @@ class ActionModule(ActionBase):
                 continue
 
             for e in matcher['matcher_expressions']:
-                if self._eval_matcher_expression(expr=e, vars=temp_vars):
-                    # This matcher expresion is true, we have found matcher
-                    found_matcher = matcher
-                    break
+                display.display("---------------------")
+                display.display("Matcher : {}".format(matcher["name"]))
+                display.display("Expression : {}".format(e))
+
+                result_eval = self._eval_matcher_expression(expr=e, vars=temp_vars)
+
+                display.display("Matched : {}".format(result_eval))
+
+                if result_eval:
+                   found_matcher = matcher
+                   break
+                    
             if found_matcher:
                 break
 
