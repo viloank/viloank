@@ -23,6 +23,13 @@
   become: "{{ (ostype != 'windows') | ternary('yes', 'no') }}"
   gather_facts: false
   tasks:
+    - debug:
+        msg:
+          - "usecase_role_stat={{ hostvars['localhost'].usecase_role_stat | default('UNDEFINED') }}"
+          - "host_reachable={{ hostvars[hostvars['localhost']['affected_host']].host_reachable | default('UNDEFINED') }}"
+          - "common_role_name={{ hostvars['localhost'].common_role_name | default('UNDEFINED') }}"
+          - "custom_playbook={{ hostvars['localhost'].custom_playbook | default('UNDEFINED') }}"
+          
     - name: Include ansible_role_integration_sra_common_playbook
       include_role:
         name: ansible_role_integration_sra_common_playbook
