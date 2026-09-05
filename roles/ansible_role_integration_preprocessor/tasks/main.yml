@@ -36,17 +36,26 @@
   debug:
     msg: "{{ cred_id | unique }}"
 
+#- name: Setting Response Body
+#  set_fact:
+#    resp_body:
+#      credentials: "{{ cred_id | unique }}"
+#      extra_vars: >-
+#        {
+#          'affected_host': {{ affected_host }},
+#          'sr_data': {{ sr_data |to_json }},
+#          'first_job_id': {{ tower_job_id }}
+#         }
+
 - name: Setting Response Body
   set_fact:
     resp_body:
       credentials: "{{ cred_id | unique }}"
-      extra_vars: >-
-        {
-          'affected_host': {{ affected_host }},
-          'sr_data': {{ sr_data |to_json }},
-          'first_job_id': {{ tower_job_id }}
-         }
-
+      extra_vars:
+        affected_host: "{{ affected_host }}"
+        sr_data: "{{ sr_data }}"
+        first_job_id: "{{ tower_job_id }}"
+        
 - name: Debug resp_body
   debug:
     var: resp_body
