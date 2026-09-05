@@ -1,0 +1,40 @@
+---
+# tasks file for roles/ansible_role_integration_sra_common_playbook
+#
+- name: Block of event mapping
+  block:
+    - name: Get mapping
+      event_mapper:
+      register: event_mapper_out
+
+    - name: Debug mapper
+      debug:
+        var: event_mapper_out.matched
+      when: event_mapper_out.matched is defined
+
+    - name: Store event mapper facts
+      block:
+        - name: Set core event mapper facts
+          set_fact:
+            common_role_name: "{{ event_mapper_out.matched.common_role_name\
+              | default('NA') }}"
+            custom_playbook: "{{ event_mapper_out.matched.custom_playbook\
+              | default('false') }}"
+            skip_precheck: "{{ event_mapper_out.matched.skip_precheck\
+              | default('false') }}"
+      when: event_mapper_out.matched is defined
+
+  when: not called_event_mapper
+
+- name: Set additional delegated event mapper facts
+  set_fact:
+    host_reachable: true
+  delegate_to: "{{ affected_host }}"
+  delegate_facts: true
+  when:
+    - not called_event_mapper
+    - skip_precheck
+
+- name: Set the event mapper has already run
+  set_fact:
+    called_event_mapper: true

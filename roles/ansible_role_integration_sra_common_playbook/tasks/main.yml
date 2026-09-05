@@ -1,40 +1,114 @@
 ---
 # tasks file for roles/ansible_role_integration_sra_common_playbook
 #
-- name: Block of event mapping
+---
+# tasks file for ansible_role_integration_sra_common_playbook
+- name: "Block - common playbook"
+  ignore_unreachable: true
+  when: common_role_name != "None"
   block:
-    - name: Get mapping
-      event_mapper:
-      register: event_mapper_out
 
-    - name: Debug mapper
-      debug:
-        var: event_mapper_out.matched
-      when: event_mapper_out.matched is defined
+    - name: Set automation name
+      set_fact:
+        exec_automation: "{{ common_role_name }}"
+      when: not cp_include_role_version
 
-    - name: Store event mapper facts
+    - name: Set automation name with version
+      set_fact:
+        exec_automation: "{{ common_role_name +':'+ common_role_name_version\
+          + ':' + common_role_type }}"
+      when: cp_include_role_version
+
+    - name: Initialize incident data
+      include_role:
+        name: ansible-role-incident-data
+      vars:
+        exec_stage: "header"
+
+    - name: Gather facts block
+      when: cp_to_gather_facts
       block:
-        - name: Set core event mapper facts
+        - name: Gather host facts
+          setup:
+          become: no
+      rescue:
+        - name: "Gathering facts fails"
+          debug:
+            msg: >-
+              Failed to gather facts for target host.
+        - name: "Set exec results for gathering facts failure"
           set_fact:
-            common_role_name: "{{ event_mapper_out.matched.common_role_name\
-              | default('NA') }}"
-            custom_playbook: "{{ event_mapper_out.matched.custom_playbook\
-              | default('false') }}"
-            skip_precheck: "{{ event_mapper_out.matched.skip_precheck\
-              | default('false') }}"
-      when: event_mapper_out.matched is defined
+            exec_success: false
+            exec_changed: false
+            exec_rc: 300
+            exec_message: >-
+              sra_common_playbook failed to gather facts on target host.
+            exec_automation: "event_common_playbook"
+          when: cp_gather_facts_fails
+        - name: "Fail to continue if facts are needed"
+          fail:
+          when: cp_gather_facts_fails
 
-  when: not called_event_mapper
+    - name: "Block - Load role configs"
+      block:
+        - name: Load config files for content role
+          include_vars:
+            dir: "{{ content_role_config_dir }}"
+            files_matching: "{{ content_role_config_matches }}"
+            ignore_unknown_extensions: true
+          become: no
 
-- name: Set additional delegated event mapper facts
-  set_fact:
-    host_reachable: true
-  delegate_to: "{{ affected_host }}"
-  delegate_facts: true
-  when:
-    - not called_event_mapper
-    - skip_precheck
+      rescue:
+        - name: "Loading of configs fails"
+          debug:
+            msg: >-
+              Failed to load role config files.
+              Make sure configs files are placed in the role folder.
 
-- name: Set the event mapper has already run
-  set_fact:
-    called_event_mapper: true
+        - name: "Set exec results for config loading failure"
+          set_fact:
+            exec_success: false
+            exec_changed: false
+            exec_rc: 301
+            exec_message: >-
+              "sra_common_playbook failed to load configuration for role
+               {{ common_role_name }}"
+            exec_automation: "sra_common_playbook"
+          when: cp_load_config_fails
+        - name: "Fail to continue if facts are needed"
+          fail:
+          when: cp_load_config_fails
+
+
+    - name: Run the main role
+      block:
+        - name: "Include {{ common_role_name }}"
+          include_role:
+            name: "{{ common_role_name }}"
+      ignore_unreachable: true
+      rescue:
+        - name: "Set exec results for unexpected failure of content role"
+          set_fact:
+            exec_success: false
+            exec_changed: false
+            exec_rc: 201
+            exec_message: "Unexpected failure in triggered\
+              event automation role: '{{ common_role_name }}'"
+          when: exec_rc is not defined
+
+  rescue:
+    - name: "Set exec results for unexpected failure in event_common_playbook"
+      set_fact:
+        exec_success: false
+        exec_changed: false
+        exec_rc: 202
+        exec_message: "Unexpected failure in event_common_playbook."
+        exec_automation: "sra-common-playbook"
+      when: exec_rc is not defined
+
+- name: Finalize incident data
+  include_role:
+    name: ansible-role-incident-data
+  vars:
+    exec_stage: "footer"
+  ignore_errors: true
