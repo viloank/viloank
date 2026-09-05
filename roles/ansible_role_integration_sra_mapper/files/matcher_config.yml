@@ -1,0 +1,23 @@
+---
+matchers:
+  - name: service-restart-daemon-handler
+    matcher_expressions:
+      - item: "^.*LINUX:PROCESS-NEXT_TESTING.*$"
+  - name: cpu-aggregate-high-handler
+    matcher_expressions:
+      - item: "^.*LINUX:CPU-NEXT_TESTING:-1AGGREGATE:.*$"
+  - name: service-restart
+    matcher_expressions:
+      - item: "^.*WINDOWS:SERVICE-NEXT_TESTING:.*$"
+  - name: system-disk-cleanup-and-disk-usage
+    matcher_expressions:
+      - item: "^.*WINDOWS:FILESYSTEM-NEXT_TESTING:.*$"
+  - name: server-unavailable
+    matcher_expressions:
+      - item: "^.*NODEAVAIL:PING-NEXT_TESTING:.*$"
+  - name: high-cpu-usage-win
+    matcher_expressions:
+      - item: "^.*WINDOWS:CPU-NEXT_TESTING:.*$"
+  - name: disk-usage-alert
+    matcher_expressions:
+      - item: "^.*LINUX:FILESYSTEM-NEXT_TESTING:.*$
