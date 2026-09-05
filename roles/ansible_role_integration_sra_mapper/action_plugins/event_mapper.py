@@ -103,6 +103,7 @@ class ActionModule(ActionBase):
 
     def run(self, tmp=None, task_vars=None):
 
+        display.display("******** EVENT MAPPER RUNNING ********")
         result = super(ActionModule, self).run(tmp, task_vars)
 
         # Load job variables
