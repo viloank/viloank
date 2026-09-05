@@ -40,22 +40,18 @@ display = Display()
 
 class ActionModule(ActionBase):
 
-    def _get_test_config(self, load_from='files',
-                     config_file='matcher_config.yml',
-                     tmp=None,
-                     task_vars=None):
+    def _get_test_config(self, load_from='files', config_file='matcher_config.yml', tmp=None, task_vars=None):
+        """Load config file from folder files or specific role folder"""
+        try:
+            _config_file = self._find_needle(load_from, config_file)
+        except AnsibleError as e:
+            display.v("Error when looking for file %s, error: %s" % config_file, e)
+        try:
+            l_config_file = self._loader.get_real_file(_config_file)
+        except AnsibleFileNotFound as e:
+            display.v("Could not load file %s, error: %s" % config_file, e)
 
-      display.display("Searching for matcher_config.yml")
-
-      try:
-        path = self._find_needle(load_from, config_file)
-        display.display("FOUND: {}".format(path))
-        return self._loader.get_real_file(path)
-
-      except Exception as e:
-        display.display("ERROR FINDING FILE")
-        display.display(str(e))
-        raise
+        return l_config_file
 
     def _is_rule_enabled(self, rule):
         if rule['enabled']:
