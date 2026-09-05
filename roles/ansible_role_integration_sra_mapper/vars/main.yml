@@ -1,2 +1,24 @@
 ---
 # vars file for ansible_role_integration_sra_mapper
+---
+# vars file for ansible_role_event_mapper
+
+called_event_mapper: "{{ hostvars['localhost']['called_event_mapper']\
+  | default('false') | bool }}"
+
+item: "{{ sr_data['ITEM'] }}"
+itemcode: "{{ sr_data['ITEMCODE'] }}"
+classification: "{{ sr_data['CLASSIFICATION'] }}"
+affected_host: "{{ hostvars['localhost']['affected_host'] | default('') }}"
+affected_host_ostype: "{{ hostvars[affected_host]['ostype']\
+                       | default('linux') }}"
+ipaddress: "{{ sr_data['ip_address'] }}"                       
+
+
+em_vars_to_template:
+  - item
+  - itemcode
+  - classification
+  - affected_host
+  - affected_host_ostype
+  - ipaddress
