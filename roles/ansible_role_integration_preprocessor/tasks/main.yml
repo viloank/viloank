@@ -47,6 +47,10 @@
           'first_job_id': {{ tower_job_id }}
          }
 
+- name: Debug resp_body
+  debug:
+    var: resp_body
+    
 - name: Call second job template api
   uri:
     url: "{{ tower_host }}/api/v2/job_templates/sra_executor/launch/"
