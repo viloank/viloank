@@ -50,6 +50,11 @@
 - name: Debug resp_body
   debug:
     var: resp_body
+
+- debug:
+    msg:
+      - "{{ resp_body.extra_vars }}"
+      - "{{ resp_body.extra_vars | type_debug }}"
     
 - name: Call second job template api
   uri:
