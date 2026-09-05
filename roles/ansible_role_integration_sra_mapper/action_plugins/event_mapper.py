@@ -134,6 +134,10 @@ class ActionModule(ActionBase):
         matcher_config_file = self._get_test_config(load_from='files',
                                                     config_file='matcher_config.yml',
                                                     task_vars=temp_vars)
+        display.display("")
+        display.display("===== Event Mapper Debug =====")
+        display.display("matcher_config_file = {}".format(matcher_config_file))
+        
         try:
             with open(matcher_config_file) as mcf:
                 content = mcf.read()
