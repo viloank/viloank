@@ -1,4 +1,21 @@
 ---
+
+- name: Set default intenal facts
+  set_fact:
+    sr_data: "{{ sr_data | default('') }}"
+    override_str: []
+    Socks_File_Created: "NOT APPLICABLE"
+    stat_msg: "NOT AVAILABLE - INTERNAL ERROR"
+    final_ack_role_stat: "{{ eiroles_enable['final_ack_role'] }}"
+    excluderole :  ansible_role_integration_sra_exclude
+    skip_precheck: false
+    usecase_role_stat: false
+    eiroles_enable: "{{ eiroles_enable | combine({'sra_exclude_role': true}) }}"
+  no_log: true
+
+- block:
+  - name: Including vars sra exclude
+    include_vars: excludesr_rules.yml
 # ***** Calling event mapper role  *****
 - block:
   - name: Including vars related mapper_config
