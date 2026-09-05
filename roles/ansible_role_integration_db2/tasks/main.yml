@@ -1,0 +1,9 @@
+---
+# tasks file for roles/ansible_role_integration_db2
+#
+- name: Check hostname
+  command: hostname
+  register: hostname_out
+
+- debug:
+    var: hostname_out.stdout
