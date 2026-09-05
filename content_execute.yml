@@ -10,9 +10,9 @@
     eiroles_enable:
       socks_tunnel_role: true
       final_ack_role: true
-     
-- debug:
-    msg:
+  tasks:
+   - debug:
+       msg:
           - "affected_host={{ affected_host | default('UNDEFINED') }}"
           - "sr_data={{ sr_data | default('UNDEFINED') }}"
           - "first_job_id={{ first_job_id | default('UNDEFINED') }}"
