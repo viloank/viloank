@@ -1,7 +1,5 @@
 ---
 # vars file for ansible_role_integration_sra_mapper
----
-# vars file for ansible_role_event_mapper
 
 called_event_mapper: "{{ hostvars['localhost']['called_event_mapper']\
   | default('false') | bool }}"
